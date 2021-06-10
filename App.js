@@ -1,13 +1,67 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import BlockRGB from './components/BlockRGB';
+import { useState } from 'react';
+import DetailsScreen from './screens/DetailsScreen';
+
+function HomeScreen({ navigation }) {
+  const [colors, setColors] = useState([]);
+  function renderItem({ item }) {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Details');
+        }}
+      >
+        <BlockRGB red={item.red} green={item.green} blue={item.blue} />;
+      </TouchableOpacity>
+    );
+  }
+
+  function addColor() {
+    setColors([
+      {
+        red: Math.floor(Math.random() * 255),
+        green: Math.floor(Math.random() * 255),
+        blue: Math.floor(Math.random() * 255),
+        id: colors.length,
+      },
+      ...colors,
+    ]);
+  }
+
+  return (
+    <View style={styles.container}>
+      <Button onPress={addColor} title='Add Color' />
+      <FlatList
+        style={{ width: '100%' }}
+        data={colors}
+        renderItem={renderItem}
+      ></FlatList>
+    </View>
+  );
+}
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name='Home' component={HomeScreen} />
+        <Stack.Screen name='Details' component={DetailsScreen}></Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
