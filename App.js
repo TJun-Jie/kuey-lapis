@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   FlatList,
@@ -16,11 +16,18 @@ import DetailsScreen from './screens/DetailsScreen';
 
 function HomeScreen({ navigation }) {
   const [colors, setColors] = useState([]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Button onPress={addColor} title='Add' />,
+    });
+  });
+
   function renderItem({ item }) {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('Details');
+          navigation.navigate('Details', { ...item });
         }}
       >
         <BlockRGB red={item.red} green={item.green} blue={item.blue} />;

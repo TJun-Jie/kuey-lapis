@@ -1,6 +1,28 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 
-export default function DetailsScreen() {
-  return <Text> Hello iI am detailed</Text>;
+export default function DetailsScreen({ route }) {
+  const { red, green, blue } = route.params;
+  const avgColor = (red + green + blue) / 3;
+  const textColor = avgColor < 140 ? 'white' : 'black';
+  return (
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: `rgba(${red}, ${green} , ${blue} , 1)` },
+      ]}
+    >
+      <Text style={{ color: textColor }}>Red: {red}</Text>
+      <Text style={{ color: textColor }}>green: {green}</Text>
+      <Text style={{ color: textColor }}>blue : {blue}</Text>
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
